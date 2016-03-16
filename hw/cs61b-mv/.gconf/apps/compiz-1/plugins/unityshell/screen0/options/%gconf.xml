@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<gconf>
+	<entry name="num_launchers" mtime="1396412356" type="int" value="0"/>
+	<entry name="edge_responsiveness" mtime="1377880883" type="float" value="3.4957746478873242"/>
+	<entry name="reveal_trigger" mtime="1377880880" type="int" value="0"/>
+	<entry name="launcher_hide_mode" mtime="1377880891" type="int" value="0"/>
+</gconf>

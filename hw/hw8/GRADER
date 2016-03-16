@@ -1,0 +1,23 @@
+GRADER file for Homework 8
+
+ Your Name:  Kevin Chau
+Your Login:  cs61b-mv
+
+Part III.  Running time comparisons
+
+	List size         mergesort             quicksort
+			100             1                       1
+		1,000             9                       3
+	 10,000             31                      17
+	100,000             203                     150
+1,000,000             5764                    2241
+
+Part IV.
+
+	Is mergesort stable?  
+	Why or why not?
+	The mergesort I implemented should always be stable. This is because mergeSortedQueues merges equal objects (from different queues) by first enqueuing the key from the first queur and then enqueuing the key from the second queue (lines 54-55). In mergeSort itself, suppose we have a key X with two entries in the queue. In the queue of queues, it will merge the first X it encounters and move it to the back of the queue; then the next instance of X it encounters it will also move it to the back, and we know it is behind the first. So when mergeSort calls mergeSortedQueues to put the two equal X's together, we know the first X input will be in the first queue to merge, and the second X input will be the in the second queue passed to mergeSortedQueues(). See lines 114-115.
+
+	Is quicksort stable?  
+	Why or why not?
+	Quicksort in this case is also stable. That's because in the partition method, equal keys are enqueued in order of their input, regardless of whether than are smaller than, equal to, or greater than the pivot (so regardless of which partition the equal keys are in). Line 91 shows that the keys are read and enqueued in input order. So when quickSort finally puts equal keys next to eachother with the append methods, they will still be in the order they were inputed. Essentially, using the queue data structure helps us make quickSort stable. 

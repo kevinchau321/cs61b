@@ -1,0 +1,75 @@
+(defvar *standard-java-header* "~cs61b/lib/pnh-header.java")
+
+(defun insert-java-header () 
+  (interactive)
+  (goto-char (point-min))
+  (insert-file *standard-java-header*)
+  (goto-char (point-min))
+  (re-search-forward "FILENAME")
+  (backward-kill-word 1)
+  (insert (file-name-nondirectory (buffer-file-name nil)))
+)
+(global-set-key "\^cj" 'insert-java-header)
+
+(put 'mh-rmail 'disabled nil)
+
+(put 'erase-buffer 'disabled nil)
+
+(put 'eval-expression 'disabled nil)
+
+(put 'narrow-to-region 'disabled nil)
+
+(setq next-line-add-newlines nil)
+
+(defun get-bug (login assgn)
+  (interactive "sLogin: \nsAssignment: ")
+  (if (and assgn (not (string-equal assgn "")))
+      (let ((dir (expand-file-name (concat "~/work/" login))))
+	(shell)
+	(shell-command (concat "/bin/rm -rf " dir))
+	(shell-command (concat "/bin/mkdir -p " dir))
+	(goto-char (point-max))
+	(insert "cd " dir "\n")
+	(comint-send-input)
+	(insert "get-bug " assgn " cs61b-" login "\n")
+	(comint-send-input)))
+  )
+
+(defun claim-bug (login assgn)
+  (interactive "sLogin: \nsAssignment: ")
+  (get-bug login assgn)
+  (if (and assgn (not (string-equal assgn "")))
+      (progn
+        (insert "bug-track claim " assgn " cs61b-" login "\n")
+        (comint-send-input))))
+
+(defun get-subm (login assgn)
+  (interactive "sLogin: \nsAssignment: ")
+  (let ((dir (expand-file-name (concat "~/work/" login))))
+    (shell)
+    (shell-command (concat "/bin/rm -rf " dir))
+    (shell-command (concat "/bin/mkdir -p " dir))
+    (goto-char (point-max))
+    (insert "cd " dir "\n")
+    (comint-send-input)
+    (insert "get-subm " assgn " cs61b-" login)
+    (comint-send-input)
+    (cd dir))
+)
+
+(defun add-grade (login grade)
+  (interactive "sLogin: \nsGrade: ")
+  (goto-char (point-min))
+  (re-search-forward (concat "cs61b-" login))
+  (end-of-line 1)
+  (insert (format " %s" grade))
+)
+
+(defconst orig-file-name-all-completions 
+  (symbol-function 'file-name-all-completions)
+  "Original definition of file-name-all-completions")
+orig-file-name-all-completions
+(defun file-name-all-completions (prefix dir)
+  (condition-case nil
+      (funcall orig-file-name-all-completions prefix dir)
+      (error nil)))

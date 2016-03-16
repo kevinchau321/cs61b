@@ -1,0 +1,15 @@
+class discussion3 {
+	public int sum(int[] A) {
+		int sum = 0;
+		for (int i=0; i<A.length; i++){
+			sum = sum + A[i];
+		}
+	}
+	public void ShiftRight(int[] A){
+		int last = A[A.length-1];
+		for (int i=A.length; i>=A.length;i--) {
+			A[i]=A[i-1];
+		}
+		A[0]= last;
+	}
+}

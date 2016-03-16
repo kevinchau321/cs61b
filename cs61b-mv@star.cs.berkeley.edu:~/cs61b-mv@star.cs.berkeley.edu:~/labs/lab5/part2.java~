@@ -1,0 +1,4 @@
+public class part2 extends X implements I{
+	public static void main(String[] args){
+	}
+}

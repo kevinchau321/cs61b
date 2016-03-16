@@ -1,0 +1,191 @@
+                                    GRADER
+
+Name of student running submit: Kevin Chau
+Login of student running submit: cs61b-mv
+
+Second team member's name: Samuel Kai Drake
+Second team member's login: cs61b-ok
+
+Third team member's name (if any): Allen Chen
+Third team member’s login: cs61b-ns
+
+IMPORTANT:  Once you've submitted Project 2 once, the same team member should
+submit always.  If a different teammate must submit, inform cs61b@cory.eecs of
+all the details.  Include a complete list of team members, and let us know
+which submission you want graded.
+
+If you've submitted your project once, or even written a substantial amount of
+code together, you may not change partners without the permission of the
+instructor.
+=====================================================================
+Does your program compile without errors? 
+Yes.
+Have you tested your program on the 61B lab machines? 
+Yes.
+Did you successfully implement game tree search? 
+Yes. 
+Did you successfully implement alpha-beta pruning?  
+Yes.
+Are there any limitations on it? 
+Minimax does everything it should, including winning in the shortest moves possible and looking ahead, as well as blocking opponent wins when advantageous.
+What is the default number of search levels set by the one-parameter MachinePlayer constructor (or is it a variable-depth search)? 
+The default search depth is 3. But a MachinePlayer can be constructed with any search depth, and the minimax algorithm used by chooseMove() will use the players search depth.
+Describe your board evaluation function in some detail.
+Our evaluation function scores a gameboard based on which player has a better advantage of winning the game. A negative score indicates that your opponent has a greater advantage, a positive score indicates that you have the advantage, and a neutral score indicates that neither has the advantage. The gameboard is scored based on the number of chip connections that each player has. A hashtable is implemented in evaluation() to save time: we first check if a gameboard has already been scored and stored in the hashtable; if so we just search for the value in the hashtable; if not we score the gameboard and insert it into the hashtable.
+
+Does your MachinePlayer use any special method of choosing the first few moves?
+  The first 2 moves are predetermined. One is placed in each goal zone. 
+
+Is there anything else the graders should know to help them read your project?
+  No, MachinePlayer should run as described in the readme and autograder tests. Use Word wrap in text editor.
+
+Describe the classes, modules, and interfaces you designed before and while you
+implemented the project.  Your description should include:
+  -  A list of the classes your program uses.
+  -  A list of each of the "modules" used in or by MachinePlayer, similar to
+     the list in the "Teamwork" section of the README (but hopefully more
+     detailed).  (If you're using a list class, that should probably count as
+     a separate module.)
+  -  For each module, list the class(es) the module is implemented in.
+  -  For each module, say which of your team members implemented it.
+  -  For each module, describe its interface--specifically, the prototype and
+     behavior of each method that is available for external callers (outside
+     the module) to call.  Don't include methods that are only meant to be
+     called from within the module.
+
+     For each method, provide (1) a method prototype and (2) a complete,
+     unambiguous description of the behavior of the method/module.  This
+     description should also appear before the method in your code's comments.
+
+You will probably need to change some of your design decisions as you go; be
+sure to modify this file to reflect these changes before you submit your
+project.  Your design of classes and interfaces will be worth 10% of your
+grade.
+
+CLASSES/PACKAGES LIST: 
+
+GameBoard (package game)
+The GameBoard class implements a 2D array of chips that represents the state of the game. A new GameBoard constructor should make an empty 8X8 array. The GameBoard must be able to allow a player to place chips in the array according to moves that the player chooses and makes (in the player class). Therefore it should have a set of public add chip and remove chip methods that allow players (which are outside the package) to place chips into the gameboard array (the add method necessarily knows where it can add chips--ie not on top of another). The GameBoard also knows how many chips each player side has, so that it can enforce the maximum chip number rule. Therefore, GameBoards add and remove methods should also be able to access the chips color/side, a field contained in the chip class, in order to increment and decrement the chip counts. The GameBoard should implement a public method that allows players to determine whether or not it has a valid network for a certain side.
+
+Chip (package game)
+A Chip has a player side and knows its location in the GameBoard array in terms of private x and y coordinates. Therefore, the chip class will need getters for public access to these variables. The chip will also have a list of other chips it can possibly connect with in a network. A chip cannot change color, so its side should be set during construction only.
+
+MachinePlayer (package player)
+An implementation of an automatic Network player.  Keeps track of moves
+made by both players.  Can select a move for itself. The MachinePlayer will also be able to make a move by changing its own GameBoard. In order to choose a move, the machine player will also use a game tree search method that uses an alpha beta pruned minimax algorithm, along with an evaluation method to evaluate a gameboard once a move has been made. The tree search should also maintain a transposition table(aka a hashtable or dictionary) with gameboard scores so that a particular gameboard will only need to be calculated at most one. Board evaluation will check the table to see if that gameboard has already been calculated, if not it will call a new evaluation. The table should be emptied after making every move.
+
+Best (package player)
+A class used for minimax alpha-beta pruning. Stores a move as the best move possible.
+
+HashTableChained (package dict)
+HashTableChained implements a Dictionary as a hash table with chaining.
+All objects used as keys must have a valid hashCode() method, which is
+used to determine which bucket of the hash table an entry is stored in.
+Each object's hashCode() is presumed to return an int between
+Integer.MIN_VALUE and Integer.MAX_VALUE.  The HashTableChained class
+implements only the compression function, which maps the hash code to
+a bucket in the table's range.
+
+DList (package list)
+A DList is a mutable doubly-linked list ADT. Its implementation is circularly-linked and employs a sentinel node at the head of the list. 
+
+DListNode (package list)
+The DListNode class stores a node of a DList. 
+
+Dictionary (package dict)
+An interface for unordered dictionary ADTs.
+
+MODULES:
+1)  Determining a valid move:
+  Classes implemented in: MachinePlayer
+  Programmer: SAMUEL KAI DRAKE
+Interface Description: 
+In order to determine if a move is valid or not, any method can use MachinePlayer’s public method, isValidMove, which returns a boolean.
+isValidMove takes in the following parameters: a GameBoard, a Move, and side. It returns true if a move is a valid move (according to the rules of the game) and returns false otherwise. Two different DLists of valid moves can be created with the validAddMoves and validStepMove methods, one being a DList of ADD moves the other a DList of STEP moves. ForceMove and OpponentMove, two mthods also in MachinePlayer use isValidMove to make sure that the chips that they are about to add to the board are actually okay to add. ChooseMove’s helper, MiniMax, uses the DLists of valid moves to determine which of the valid moves is the best one to make.
+
+Methods: 
+/*This method checks if a particular move is legal. It takes in
+   * the gameboard we are playing on, the move we are trying to test, 
+   * and the side that the mover is on.
+ */
+public boolean isValidMove(GameBoard board, Move move, int side){}
+
+2)  Generating a list of all valid moves:
+  Classes implemented in: MachinePlayer
+  Programmer: SAMUEL KAI DRAKE
+  Interface Description: 
+We have two methods that create DLists of valid Moves with the public method validAddMoves and validStepMoves. The parameters of these methods are a GameBoard and a side. The methods determine if moves are valid with the method isValidMove. The chooseMove method’s helper, MiniMax, uses these methods to find the best move from all the potential moves that the methods provide them with. 
+
+  Methods:
+    /* Returns a list of possible valid add moves that a player could make 
+    * given a gameboard with a certain configuration. It takes in as parameters
+    * the gameboard that we are playing on, and the side of the player. 
+    */
+public DList validAddMoves (GameBoard board, Player side){}
+
+
+/*Returns a list of possible valid step moves that a player could make 
+ * given a gameboard with a certain configuration. It takes in as parameters
+ * the gameboard that we are playing on, and the side of the player.
+ */
+public DList validStepMoves (GameBoard board, Player side){}
+
+
+  3) Generating a chip’s connections
+  Classes implemented in: Chip
+    Chip, GameBoard
+  Programmer: Allen 
+Interface Description: 
+This module helps generate a list, which includes all the other chips that can form a legal network connection with “this” chip. It is intended to be used by a Network constructor in order for the Network to know which chips are valid to include in a network containing a certain chip. A chip’s valid connections can be found by calling the public method getConnections(), which takes in a parameter “Chip”, and it returns a list of possible connections. The network constructor can then use this list to create all the possible networks on the game board. 
+  Methods:
+/** GetConnections returns a Dlist of references to chips, which represents all of the chips that this chip can form a valid connection with. This method takes in one parameters, which is the current gameboard. If a chip has no valid connections, getConnections should return an empty Dlist. 
+
+    **/
+public Chips[] getConnections(Chip certainchip) {}
+
+
+4)  Analyzing GameBoard for game winning Networks
+  Classes implemented in: GameBoard
+  Programmer: Kevin
+  Interface Description:
+The GameBoard win-analyzer’s purpose is to identify valid networks for each side and return a boolean that reflects whether or not the current state of the GameBoard has a network that complies with all the rules of Network and is a win for the Player side that the analyzer is called on. It is implemented through one public method, hasValidNetwork(), which takes a parameter Player side, that returns true when “side” has a win and false if the analyzer cannot construct a Network of chips that wins the game for side. This module uses a Depth First Search (DFS) algorithm, but the method is private and callable only within hasValideNetwork. In particular, this module can be called from the board evaluation module or the MachinePlayer module for the purposes of giving max and min scores at the base cases of the minimax recursions.
+  Methods:
+/*hasValidNetwork() is a Network identifier that returns true if this GameBoard has a winning Network (according to the rules) for the parameter side (a player), and false if the GameBoard does not contain a valid network. hasValidNetwork() uses a Depth First Search to find winning networks that enforce the network invariants. 
+*/
+  public boolean hasValidNetwork(int side){}
+
+5)  Evaluating the GameBoard:
+  Classes implemented in:
+    GameBoard, MachinePlayer
+  Programmer: Allen
+  Interface Description:
+This module evaluates a given GameBoard, and will return a score that tells us whether the board favors you or your opponent. The method evaluate() takes in 1 parameter: a GameBoard that you are trying to score. This method will give a score to the GameBoard: a positive value indicates that the GameBoard favors you, a negative value indicates that the GameBoard favors the opponent, a neutral value indicates that neither you or your opponent has an advantage. Each score of a certain GameBoard is stored in a dictionary, so that each unique GameBoard needs to be evaluated only once. If we are trying to evaulate a GameBoard that has already been evaluated, we can just look inside the dictionary to find the value, instead of calculating it again.
+
+  Methods:
+    /*
+Evaluation() scores a gameboard based on which player has a better advantage of winning the game. A negative score indicates that your opponent has a greater advantage, a positive score indicates that you have the advantage, and a neutral score indicates that neither has the advantage. The gameboard is scored based on the number of chip connections that each player has. A hashtable is implemented in evaluation() to save time: we first check if a gameboard has already been scored and stored in the hashtable; if so we just search for the value in the hash table; if not we score the gameboard and insert it into the hashtable. */
+
+public int evaluate(GameBoard board, Move move, Player side){}
+
+
+/**searchBoardDict() returns a score value for a given GameBoard, which has been evaluated already (so we do not have to evaluate it again, and therefore will save time). It takes in one parameter GameBoard, which is a GameBoard that has already been evaluated, so should be in the dictionary of scores. It will look through the dictionary for the given gameboard, and return the value that is stored in that key. 
+**/
+public int searchBoardDict(GameBoard board)
+
+
+6)  Minimax Game Tree Search for ChooseMove()
+Classes implemented in:
+MachinePlayer
+
+  Programmer: Kevin
+  Interface Description:
+The game tree search is implemented in the MachinePlayer class and is called within the chooseMove method when the MachinePlayer needs to make a move after updating its internal gameboard following an opponentMove(). 
+This tree search uses a minimax algorithm with alpha-beta pruning. It takes parameters of type GameBoard and an integer that specifies the search depth of the algorithm. The module only has one public method in its interface, GameTreeSearch(), which allows any player or class to perform a tree search for a move, as long as they know what gameboard configuration they and side they want to run the algorithm for.
+  Methods:
+    /*
+Uses alpha-beta pruning to return the best move that we can make. It takes in 6 parameters: side is either 0 or 1 and it represents the team you are on; a and b are the alpha and beta values that we use to determine max/min scores; g is the gameboard that we are playing on; depth is the search depth that we want to use, which will determine how many moves we look ahead; newMove is the move that you are trying to apply minimax on. 
+*/
+public Best miniMax(int side, double a, double b, GameBoard g, int depth, Move newMove) 
+
+
+

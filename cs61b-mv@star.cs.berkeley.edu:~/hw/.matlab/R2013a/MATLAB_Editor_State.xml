@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Editor version="1.0">
+   <File absPath="/Users/kevinchau/Documents/MATLAB" lastWrittenTime="1384542972999" name="hw9.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="/Users/kevinchau/ee20n/Lab 6: Shazam" lastWrittenTime="1385100212539" name="extractFeatures.m">
+      <CodeFolds version="1.0">
+         <FoldType name="help-comments">
+            <Fold endOffset="466" startOffset="141" state="collapsed"/>
+         </FoldType>
+      </CodeFolds>
+   </File>
+   <File absPath="/Users/kevinchau/Documents/MATLAB/Lab 6: Shazam" lastWrittenTime="1385775977956" name="findMatch.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="/Users/kevinchau/Documents/MATLAB/Lab 6: Shazam" lastWrittenTime="1385775977969" name="generateQuery.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="/Users/kevinchau/Documents/MATLAB/Lab 6: Shazam" lastWrittenTime="1385775978042" name="extractFeatures.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="/Users/kevinchau/Documents/MATLAB/Lab 6: Shazam" lastWrittenTime="1386350937155" name="main.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="/Users/kevinchau/ee20n/Lab8" lastWrittenTime="1386384999265" name="demosaicPDI.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="/Users/kevinchau/ee20n/Lab8" lastWrittenTime="1386384999277" name="demosaicBilinear.m">
+      <CodeFolds version="1.0"/>
+   </File>
+</Editor>
